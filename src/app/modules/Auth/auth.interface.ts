@@ -1,6 +1,12 @@
 
-export type TAccount = {
+export type TCreateAccount = {
     name: string;
+    email: string;
+    password: string;
+    confirmPassword: string
+}
+
+export type TLoginAccount ={
     email: string;
     password: string;
 }
