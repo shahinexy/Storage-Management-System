@@ -17,6 +17,8 @@ router.get("/:id", FolderControllers.getSingleFolder);
 
 router.patch("/:id", FolderControllers.updateFolder); 
 
+router.patch("/make-favorite/:id", FolderControllers.makeFavoriteFolder); 
+
 router.delete("/:id", FolderControllers.deleteFolder); 
 
 export const FolderRouters = router;

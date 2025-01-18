@@ -50,6 +50,18 @@ const updateFolder = CatchAsync(async(req, res)=>{
 })
 
 
+const makeFavoriteFolder = CatchAsync(async(req, res)=>{
+    const {id} = req.params;
+    const result = await FolderServices.makeFavoritFolderFromDB(id)
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Maked favorite successfully',
+        data: result
+      })
+})
+
 const deleteFolder = CatchAsync(async(req, res)=>{
     const {id} = req.params;
     const result = await FolderServices.deleteFolderFromDB(id)
@@ -67,5 +79,6 @@ export const FolderControllers = {
     getAllFolder,
     getSingleFolder,
     updateFolder,
+    makeFavoriteFolder,
     deleteFolder
 }

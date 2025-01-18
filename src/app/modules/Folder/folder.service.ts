@@ -24,6 +24,18 @@ const updateFolderFromDB = async (id: string, payload: { name: string }) => {
   return result;
 };
 
+const makeFavoritFolderFromDB = async (id: string) => {
+  const result = await FolderModel.findByIdAndUpdate(
+    id,
+    { isFavorite: true },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  return result;
+};
+
 const deleteFolderFromDB = async (id: string) => {
   const result = await FolderModel.findByIdAndDelete(id);
   return result;
@@ -34,5 +46,6 @@ export const FolderServices = {
   getAllFolderFromDB,
   getSingleFolderFromDB,
   updateFolderFromDB,
-  deleteFolderFromDB
+  makeFavoritFolderFromDB,
+  deleteFolderFromDB,
 };
