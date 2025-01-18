@@ -1,4 +1,5 @@
 import config from "../../config";
+import AppError from "../../error/AppError";
 import { TCreateAccount, TLoginAccount } from "./auth.interface";
 import { CreateAccountModel } from "./auth.model";
 import bcrypt from "bcrypt";
@@ -6,17 +7,17 @@ import jwt from "jsonwebtoken";
 
 const createAccountIntoDB = async (payload: TCreateAccount) => {
   // if email exist
-  const isEmailExists = await CreateAccountModel.findOne({
+  const isAccountExists = await CreateAccountModel.findOne({
     email: payload.email,
   });
 
-  if (isEmailExists) {
-    throw new Error("This Email already exists");
+  if (isAccountExists) {
+    throw new AppError(403, "This Account already exists");
   }
 
   // check password and confirmpassword are matched
   if (payload.password !== payload.confirmPassword) {
-    throw new Error("Passwords do not match");
+    throw new AppError(401, "Passwords do not match");
   }
 
   const result = await CreateAccountModel.create(payload);
@@ -30,7 +31,7 @@ const loginAccount = async (payload: TLoginAccount) => {
   });
 
   if (!isAccountExist) {
-    throw new Error("This Account do not exists");
+    throw new AppError(404, "This Account do not exists");
   }
 
   // check if password matched
@@ -40,7 +41,7 @@ const loginAccount = async (payload: TLoginAccount) => {
   );
 
   if (!isPasswordMatched) {
-    throw new Error("Password do not matched");
+    throw new AppError(401, "Password do not matched");
   }
 
   const jwtPayload = {

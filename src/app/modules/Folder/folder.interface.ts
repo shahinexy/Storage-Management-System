@@ -1,5 +1,7 @@
+import { Types } from "mongoose";
 
 export type TFolder = {
     name: string;
-    idFavourit: boolean
+    userId: Types.ObjectId;
+    isFavorite?: boolean
 }
