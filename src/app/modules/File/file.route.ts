@@ -1,12 +1,18 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import ValidateRequest from "../../middleware/validateRequest";
 import { FileValidations } from "./file.validation";
 import { FileControllers } from "./file.controller";
+import { upload } from "../../utils/sendFileToCloudinary";
 
 const router = express.Router();
 
 router.post(
   "/upload-image",
+  upload.single('file'),
+  (req: Request, res: Response, next: NextFunction)=>{
+    req.body = JSON.parse(req.body.data)
+    next()
+  },
   ValidateRequest(FileValidations.fileValidationSchema),
   FileControllers.uploadImage
 );

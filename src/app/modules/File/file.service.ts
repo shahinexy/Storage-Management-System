@@ -1,20 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { sendFileToCloudinary } from "../../utils/sendFileToCloudinary";
 import { TFile } from "./file.interface";
 import { FileModel } from "./file.model";
 
-const uploadImage = async (payload: TFile) => {
-  payload.type = "img"
+const uploadImage = async (file: any, payload: TFile) => {
+  const path = file.path;
+  const fileName = payload.name;
+
+  const resourceType = file.mimetype.startsWith("image/") ? "image" : "raw";
+
+  const { secure_url } = await sendFileToCloudinary(path, fileName, resourceType, file.originalname);
+
+  payload.type = "img";
+  payload.path = secure_url;
+
   const result = await FileModel.create(payload);
   return result;
 };
 
 const uploadPDF = async (payload: TFile) => {
-  payload.type = "pdf"
+  payload.type = "pdf";
   const result = await FileModel.create(payload);
   return result;
 };
 
 const uploadDoc = async (payload: TFile) => {
-  payload.type = "doc"
+  payload.type = "doc";
   const result = await FileModel.create(payload);
   return result;
 };
@@ -49,5 +60,5 @@ export const FileServices = {
   getAllFileFromDB,
   getSingleFileFromDB,
   updateFileFromDB,
-  deleteFileFromDB
+  deleteFileFromDB,
 };
