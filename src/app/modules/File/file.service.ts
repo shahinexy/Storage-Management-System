@@ -4,8 +4,19 @@ import AppError from "../../error/AppError";
 import { sendFileToCloudinary } from "../../utils/sendFileToCloudinary";
 import { TFile } from "./file.interface";
 import { FileModel } from "./file.model";
+import { FolderModel } from "../Folder/folder.model";
+import mongoose from "mongoose";
 
-const uploadImage = async (file: any, payload: TFile) => {
+const uploadImage = async (file: any, payload: TFile, accountId: string) => {
+  const isFolderExists = await FolderModel.findOne({
+    _id: payload.folderId,
+    userId: accountId,
+  });
+
+  if (!isFolderExists) {
+    throw new AppError(400, "Create a Folder before uploading file");
+  }
+
   const filepath = file.path;
   const fileName = payload.name;
   const resourceType = file.mimetype.startsWith("image/") ? "image" : "raw";
@@ -23,12 +34,22 @@ const uploadImage = async (file: any, payload: TFile) => {
 
   payload.type = "img";
   payload.path = secure_url;
+  payload.userId = new mongoose.Types.ObjectId(accountId);
 
   const result = await FileModel.create(payload);
   return result;
 };
 
-const uploadPDF = async (file: any, payload: TFile) => {
+const uploadPDF = async (file: any, payload: TFile, accountId: string) => {
+  const isFolderExists = await FolderModel.findOne({
+    _id: payload.folderId,
+    userId: accountId,
+  });
+
+  if (!isFolderExists) {
+    throw new AppError(400, "Create a Folder before uploading file");
+  }
+
   const filePath = file.path;
   const fileName = payload.name;
   const resourceType = file.mimetype.startsWith("image/") ? "image" : "raw";
@@ -49,12 +70,22 @@ const uploadPDF = async (file: any, payload: TFile) => {
 
   payload.type = "pdf";
   payload.path = secure_url;
+  payload.userId = new mongoose.Types.ObjectId(accountId);
 
   const result = await FileModel.create(payload);
   return result;
 };
 
-const uploadDoc = async (file: any, payload: TFile) => {
+const uploadDoc = async (file: any, payload: TFile, accountId: string) => {
+  const isFolderExists = await FolderModel.findOne({
+    _id: payload.folderId,
+    userId: accountId,
+  });
+
+  if (!isFolderExists) {
+    throw new AppError(400, "Create a Folder before uploading file");
+  }
+
   const filePath = file.path;
   const fileName = payload.name;
   const resourceType = file.mimetype.startsWith("image/") ? "image" : "raw";
@@ -80,6 +111,7 @@ const uploadDoc = async (file: any, payload: TFile) => {
 
   payload.type = "doc";
   payload.path = secure_url;
+  payload.userId = new mongoose.Types.ObjectId(accountId);
 
   const result = await FileModel.create(payload);
   return result;
@@ -122,10 +154,14 @@ const updateFileFromDB = async (id: string, payload: { name: string }) => {
     throw new AppError(404, "File dose not exists");
   }
 
-  const result = await FileModel.findByIdAndUpdate(id, payload, {
-    new: true,
-    runValidators: true,
-  });
+  const result = await FileModel.findByIdAndUpdate(
+    id,
+    { name: payload.name },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
   return result;
 };
 
@@ -137,7 +173,7 @@ const makeFavoritFileIntoDB = async (id: string) => {
 
   const result = await FileModel.findByIdAndUpdate(
     id,
-    { isFavorite: true },
+    { isFavorite: !isFileExists.isFavorite },
     {
       new: true,
       runValidators: true,

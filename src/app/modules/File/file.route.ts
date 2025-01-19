@@ -8,7 +8,7 @@ import Auth from "../../middleware/auth";
 const router = express.Router();
 
 router.post(
-  "/upload-image",
+  "/upload-img",
   Auth(),
   upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
@@ -47,7 +47,12 @@ router.get("/", Auth(), FileControllers.getAllFileByType);
 
 router.get("/:id", Auth(), FileControllers.getSingleFile);
 
-router.patch("/:id", Auth(), FileControllers.updateFile);
+router.patch(
+  "/:id",
+  Auth(),
+  ValidateRequest(FileValidations.updateFileValidationSchema),
+  FileControllers.updateFile
+);
 
 router.patch("/make-favorite/:id", Auth(), FileControllers.makeFavoriteFile);
 

@@ -1,8 +1,11 @@
+import mongoose from "mongoose";
 import AppError from "../../error/AppError";
 import { TFolder } from "./folder.interface";
 import { FolderModel } from "./folder.model";
 
-const createFolderIntoDB = async (payload: TFolder) => {
+const createFolderIntoDB = async (payload: TFolder, accountId: string) => {
+  payload.userId = new mongoose.Types.ObjectId(accountId);
+
   const result = await FolderModel.create(payload);
   return result;
 };
@@ -41,10 +44,14 @@ const updateFolderFromDB = async (id: string, payload: { name: string }) => {
     throw new AppError(404, "Folder dose not exists");
   }
 
-  const result = await FolderModel.findByIdAndUpdate(id, payload, {
-    new: true,
-    runValidators: true,
-  });
+  const result = await FolderModel.findByIdAndUpdate(
+    id,
+    { name: payload.name },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
   return result;
 };
 
@@ -56,7 +63,7 @@ const makeFavoritFolderIntoDB = async (id: string) => {
 
   const result = await FolderModel.findByIdAndUpdate(
     id,
-    { isFavorite: true },
+    { isFavorite: !isFolderExists.isFavorite },
     {
       new: true,
       runValidators: true,

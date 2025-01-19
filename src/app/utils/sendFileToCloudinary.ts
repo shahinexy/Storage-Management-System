@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import config from "../config";
 import multer from "multer";
 import fs from "fs";
@@ -17,7 +17,7 @@ export const sendFileToCloudinary = async (
   fileName: string,
   fileType: "image" | "raw",
   originalname: string
-) => {
+): Promise<UploadApiResponse> => {
   const extension = path.extname(originalname);
 
   const publicId = `${fileName}${extension}`;

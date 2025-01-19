@@ -3,7 +3,8 @@ import sendResponse from "../../utils/sendResponse";
 import { FolderServices } from "./folder.service";
 
 const createFolder = CatchAsync(async (req, res) => {
-  const result = await FolderServices.createFolderIntoDB(req.body);
+  const {accountId} = req.user
+  const result = await FolderServices.createFolderIntoDB(req.body, accountId);
 
   sendResponse(res, {
     statusCode: 200,

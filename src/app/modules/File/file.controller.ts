@@ -3,7 +3,8 @@ import sendResponse from "../../utils/sendResponse";
 import { FileServices } from "./file.service";
 
 const uploadImage = CatchAsync(async (req, res) => {
-  const result = await FileServices.uploadImage(req.file, req.body);
+  const { accountId } = req.user;
+  const result = await FileServices.uploadImage(req.file, req.body, accountId);
 
   sendResponse(res, {
     statusCode: 200,
@@ -14,7 +15,8 @@ const uploadImage = CatchAsync(async (req, res) => {
 });
 
 const uploadPDF = CatchAsync(async (req, res) => {
-  const result = await FileServices.uploadPDF(req.file, req.body);
+  const { accountId } = req.user;
+  const result = await FileServices.uploadPDF(req.file, req.body, accountId);
 
   sendResponse(res, {
     statusCode: 200,
@@ -25,7 +27,8 @@ const uploadPDF = CatchAsync(async (req, res) => {
 });
 
 const uploadDoc = CatchAsync(async (req, res) => {
-  const result = await FileServices.uploadDoc(req.file, req.body);
+  const { accountId } = req.user;
+  const result = await FileServices.uploadDoc(req.file, req.body, accountId);
 
   sendResponse(res, {
     statusCode: 200,
@@ -38,7 +41,10 @@ const uploadDoc = CatchAsync(async (req, res) => {
 const getAllFileByType = CatchAsync(async (req, res) => {
   const { accountId } = req.user;
 
-  const result = await FileServices.getAllFileByTypeFromDB(accountId, req.query);
+  const result = await FileServices.getAllFileByTypeFromDB(
+    accountId,
+    req.query
+  );
 
   sendResponse(res, {
     statusCode: 200,

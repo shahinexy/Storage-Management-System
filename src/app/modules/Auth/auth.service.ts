@@ -47,7 +47,7 @@ const loginAccount = async (payload: TLoginAccount) => {
   const jwtPayload = {
     accountEmail: isAccountExist.email,
     accountName: isAccountExist.name,
-    accountId: isAccountExist._id
+    accountId: isAccountExist._id,
   };
 
   const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
