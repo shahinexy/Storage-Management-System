@@ -4,6 +4,7 @@ import AppError from "../../error/AppError";
 import { sendFileToCloudinary } from "../../utils/sendFileToCloudinary";
 import { TFile } from "./file.interface";
 import { FileModel } from "./file.model";
+import { CreateAccountModel } from "../Auth/auth.model";
 
 const uploadImage = async (file: any, payload: TFile) => {
   const filepath = file.path;
@@ -35,7 +36,7 @@ const uploadPDF = async (file: any, payload: TFile) => {
   const originalname = file.originalname;
 
   const extension = path.extname(originalname);
-  console.log(extension);
+
   if (extension !== ".pdf") {
     throw new AppError(400, "Invalid file type expected pdf");
   }
@@ -85,8 +86,9 @@ const uploadDoc = async (file: any, payload: TFile) => {
   return result;
 };
 
-const getAllFileFromDB = async () => {
-  const result = await FileModel.find();
+const getAllFileFromDB = async (accountId: {accountId: string}, query: Record<string, unknown>) => {
+
+  const result = await FileModel.find({userId: accountId, ...query})
   return result;
 };
 
@@ -103,7 +105,7 @@ const updateFileFromDB = async (id: string, payload: { name: string }) => {
   return result;
 };
 
-const makeFavoritFolderIntoDB = async (id: string) => {
+const makeFavoritFileIntoDB = async (id: string) => {
   const result = await FileModel.findByIdAndUpdate(
     id,
     { isFavorite: true },
@@ -127,6 +129,6 @@ export const FileServices = {
   getAllFileFromDB,
   getSingleFileFromDB,
   updateFileFromDB,
+  makeFavoritFileIntoDB,
   deleteFileFromDB,
-  makeFavoritFolderIntoDB,
 };

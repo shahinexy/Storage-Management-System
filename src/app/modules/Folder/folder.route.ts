@@ -11,7 +11,7 @@ router.post(
   FolderControllers.createFolder
 );
 
-router.get("/", FolderControllers.getAllFolder);
+router.get("/:userId", FolderControllers.getAllFolder);
 
 router.get("/:id", FolderControllers.getSingleFolder);
 

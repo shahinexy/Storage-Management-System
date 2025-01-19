@@ -14,7 +14,8 @@ const createFolder = CatchAsync(async (req, res) => {
 });
 
 const getAllFolder = CatchAsync(async (req, res) => {
-  const result = await FolderServices.getAllFolderFromDB();
+    const {userId}= req.params
+  const result = await FolderServices.getAllFolderFromDB(userId);
 
   sendResponse(res, {
     statusCode: 200,
@@ -50,7 +51,7 @@ const updateFolder = CatchAsync(async (req, res) => {
 
 const makeFavoriteFolder = CatchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await FolderServices.makeFavoritFolderFromDB(id);
+  const result = await FolderServices.makeFavoritFolderIntoDB(id);
 
   sendResponse(res, {
     statusCode: 200,

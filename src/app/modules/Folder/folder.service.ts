@@ -6,8 +6,8 @@ const createFolderIntoDB = async (payload: TFolder) => {
   return result;
 };
 
-const getAllFolderFromDB = async () => {
-  const result = await FolderModel.find();
+const getAllFolderFromDB = async (userId: string) => {
+  const result = await FolderModel.find({userId});
   return result;
 };
 

@@ -3,6 +3,7 @@ import ValidateRequest from "../../middleware/validateRequest";
 import { FileValidations } from "./file.validation";
 import { FileControllers } from "./file.controller";
 import { upload } from "../../utils/sendFileToCloudinary";
+import Auth from "../../middleware/auth";
 
 const router = express.Router();
 
@@ -39,13 +40,13 @@ router.post(
   FileControllers.uploadDoc
 );
 
-router.get("/", FileControllers.getAllFile);
+router.get("/", Auth(),  FileControllers.getAllFile);
 
 router.get("/:id", FileControllers.getSingleFile);
 
 router.patch("/:id", FileControllers.updateFile);
 
-router.patch("/make-favorite/:id", FileControllers.makeFavoriteFolder); 
+router.patch("/make-favorite/:id", FileControllers.makeFavoriteFile); 
 
 router.delete("/:id", FileControllers.deleteFile);
 

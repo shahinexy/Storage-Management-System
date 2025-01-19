@@ -39,7 +39,6 @@ export const sendFileToCloudinary = async (
     }
   });
 
-  console.log(uploadResult);
   return uploadResult;
 };
 

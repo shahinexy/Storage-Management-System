@@ -36,12 +36,14 @@ const uploadDoc = CatchAsync(async (req, res) => {
 });
 
 const getAllFile = CatchAsync(async (req, res) => {
-  const result = await FileServices.getAllFileFromDB();
+  const { accountId } = req.user;
+
+  const result = await FileServices.getAllFileFromDB(accountId, req.query);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "File created successfully",
+    message: "File retrieved successfully",
     data: result,
   });
 });
@@ -53,7 +55,7 @@ const getSingleFile = CatchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Files retrieved successfully",
+    message: "Files get successfully",
     data: result,
   });
 });
@@ -70,18 +72,17 @@ const updateFile = CatchAsync(async (req, res) => {
   });
 });
 
+const makeFavoriteFile = CatchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await FileServices.makeFavoritFileIntoDB(id);
 
-const makeFavoriteFolder = CatchAsync(async(req, res)=>{
-    const {id} = req.params;
-    const result = await FileControllers.makeFavoritFolderFromDB(id)
-
-    sendResponse(res, {
-        statusCode: 200,
-        success: true,
-        message: 'Maked favorite successfully',
-        data: result
-      })
-})
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Maked favorite successfully",
+    data: result,
+  });
+});
 
 const deleteFile = CatchAsync(async (req, res) => {
   const { id } = req.params;
@@ -102,6 +103,6 @@ export const FileControllers = {
   getAllFile,
   getSingleFile,
   updateFile,
-  makeFavoriteFolder,
+  makeFavoriteFile,
   deleteFile,
 };
