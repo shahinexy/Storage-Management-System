@@ -35,10 +35,10 @@ const uploadDoc = CatchAsync(async (req, res) => {
   });
 });
 
-const getAllFile = CatchAsync(async (req, res) => {
+const getAllFileByType = CatchAsync(async (req, res) => {
   const { accountId } = req.user;
 
-  const result = await FileServices.getAllFileFromDB(accountId, req.query);
+  const result = await FileServices.getAllFileByTypeFromDB(accountId, req.query);
 
   sendResponse(res, {
     statusCode: 200,
@@ -100,7 +100,7 @@ export const FileControllers = {
   uploadImage,
   uploadPDF,
   uploadDoc,
-  getAllFile,
+  getAllFileByType,
   getSingleFile,
   updateFile,
   makeFavoriteFile,

@@ -4,7 +4,6 @@ import AppError from "../../error/AppError";
 import { sendFileToCloudinary } from "../../utils/sendFileToCloudinary";
 import { TFile } from "./file.interface";
 import { FileModel } from "./file.model";
-import { CreateAccountModel } from "../Auth/auth.model";
 
 const uploadImage = async (file: any, payload: TFile) => {
   const filepath = file.path;
@@ -86,18 +85,43 @@ const uploadDoc = async (file: any, payload: TFile) => {
   return result;
 };
 
-const getAllFileFromDB = async (accountId: {accountId: string}, query: Record<string, unknown>) => {
+const getAllFileByTypeFromDB = async (
+  accountId: { accountId: string },
+  query: Record<string, unknown>
+) => {
+  const result = await FileModel.find({ userId: accountId, ...query });
 
-  const result = await FileModel.find({userId: accountId, ...query})
-  return result;
+  const totalItem = result.length;
+
+  const jsonData = JSON.stringify(result);
+  const sizeInBytes = Buffer.byteLength(jsonData, "utf8");
+  const usagesStorageInGB = sizeInBytes / 1e9;
+
+  return {
+    datas: result,
+    metaData: {
+      totalItem,
+      usagesStorageInGB,
+    },
+  };
 };
 
 const getSingleFileFromDB = async (id: string) => {
+  const isFileExists = await FileModel.findById(id);
+  if (!isFileExists) {
+    throw new AppError(404, "File dose not exists");
+  }
+
   const result = await FileModel.findById(id);
   return result;
 };
 
 const updateFileFromDB = async (id: string, payload: { name: string }) => {
+  const isFileExists = await FileModel.findById(id);
+  if (!isFileExists) {
+    throw new AppError(404, "File dose not exists");
+  }
+
   const result = await FileModel.findByIdAndUpdate(id, payload, {
     new: true,
     runValidators: true,
@@ -106,6 +130,11 @@ const updateFileFromDB = async (id: string, payload: { name: string }) => {
 };
 
 const makeFavoritFileIntoDB = async (id: string) => {
+  const isFileExists = await FileModel.findById(id);
+  if (!isFileExists) {
+    throw new AppError(404, "File dose not exists");
+  }
+
   const result = await FileModel.findByIdAndUpdate(
     id,
     { isFavorite: true },
@@ -118,6 +147,11 @@ const makeFavoritFileIntoDB = async (id: string) => {
 };
 
 const deleteFileFromDB = async (id: string) => {
+  const isFileExists = await FileModel.findById(id);
+  if (!isFileExists) {
+    throw new AppError(404, "File dose not exists");
+  }
+
   const result = await FileModel.findByIdAndDelete(id);
   return result;
 };
@@ -126,7 +160,7 @@ export const FileServices = {
   uploadImage,
   uploadPDF,
   uploadDoc,
-  getAllFileFromDB,
+  getAllFileByTypeFromDB,
   getSingleFileFromDB,
   updateFileFromDB,
   makeFavoritFileIntoDB,

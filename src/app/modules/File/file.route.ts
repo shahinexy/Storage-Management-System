@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.post(
   "/upload-image",
+  Auth(),
   upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
@@ -20,6 +21,7 @@ router.post(
 
 router.post(
   "/upload-pdf",
+  Auth(),
   upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
@@ -31,6 +33,7 @@ router.post(
 
 router.post(
   "/upload-doc",
+  Auth(),
   upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
@@ -40,14 +43,14 @@ router.post(
   FileControllers.uploadDoc
 );
 
-router.get("/", Auth(),  FileControllers.getAllFile);
+router.get("/", Auth(), FileControllers.getAllFileByType);
 
-router.get("/:id", FileControllers.getSingleFile);
+router.get("/:id", Auth(), FileControllers.getSingleFile);
 
-router.patch("/:id", FileControllers.updateFile);
+router.patch("/:id", Auth(), FileControllers.updateFile);
 
-router.patch("/make-favorite/:id", FileControllers.makeFavoriteFile); 
+router.patch("/make-favorite/:id", Auth(), FileControllers.makeFavoriteFile);
 
-router.delete("/:id", FileControllers.deleteFile);
+router.delete("/:id", Auth(), FileControllers.deleteFile);
 
 export const FileRouters = router;

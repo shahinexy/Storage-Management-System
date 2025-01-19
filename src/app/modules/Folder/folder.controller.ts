@@ -14,13 +14,13 @@ const createFolder = CatchAsync(async (req, res) => {
 });
 
 const getAllFolder = CatchAsync(async (req, res) => {
-    const {userId}= req.params
-  const result = await FolderServices.getAllFolderFromDB(userId);
+  const { accountId } = req.user;
+  const result = await FolderServices.getAllFolderFromDB(accountId);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Folder created successfully",
+    message: "Folders retrieved successfully",
     data: result,
   });
 });
