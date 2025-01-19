@@ -21,28 +21,14 @@ const acountStatus = async (accountId: string) => {
 };
 
 const recentAddedData = async () => {
-
   const result = await FolderModel.aggregate([
     {
-      $match: {}, 
-    },
-    {
-      $project: { _id: 1, name: 1, userId: 1, isFavorite: 1, createdAt: 1 },
+      $match: {},
     },
     {
       $unionWith: {
-        coll: "files", 
-        pipeline: [
-          {
-            $project: {
-              _id: 1,
-              name: 1,
-              userId: 1,
-              isFavorite: 1,
-              createdAt: 1,
-            },
-          },
-        ],
+        coll: "files",
+        pipeline: [],
       },
     },
     { $sort: { createdAt: -1 } },
@@ -51,7 +37,28 @@ const recentAddedData = async () => {
   return result;
 };
 
+const favoriteData = async () => {
+  const result = await FolderModel.aggregate([
+    {
+      $match: { isFavorite: true },
+    },
+    {
+      $unionWith: {
+        coll: "files",
+        pipeline: [
+          {
+            $match: { isFavorite: true },
+          },
+        ],
+      },
+    },
+  ]);
+
+  return result;
+};
+
 export const AccountServices = {
   acountStatus,
   recentAddedData,
+  favoriteData,
 };

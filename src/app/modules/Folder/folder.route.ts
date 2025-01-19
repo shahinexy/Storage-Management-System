@@ -23,4 +23,6 @@ router.patch("/make-favorite/:id", Auth(), FolderControllers.makeFavoriteFolder)
 
 router.delete("/:id", Auth(), FolderControllers.deleteFolder); 
 
+router.post("/duplicate/:id", Auth(), FolderControllers.duplicateDocument);
+
 export const FolderRouters = router;

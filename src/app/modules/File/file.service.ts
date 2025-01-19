@@ -192,6 +192,20 @@ const deleteFileFromDB = async (id: string) => {
   return result;
 };
 
+const duplicateDocument = async (id: string) => {
+  const file = await FileModel.findById(id);
+  if (!file) {
+    throw new AppError(404, "File dose not found");
+  }
+
+  const { _id, createdAt, updatedAt, ...restFileData } = file.toObject();
+
+  const duplicatedFile = new FileModel(restFileData);
+  await duplicatedFile.save();
+
+  return duplicatedFile;
+};
+
 export const FileServices = {
   uploadImage,
   uploadPDF,
@@ -201,4 +215,5 @@ export const FileServices = {
   updateFileFromDB,
   makeFavoritFileIntoDB,
   deleteFileFromDB,
+  duplicateDocument,
 };

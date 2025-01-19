@@ -102,6 +102,18 @@ const deleteFile = CatchAsync(async (req, res) => {
   });
 });
 
+const duplicateDocument = CatchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await FileServices.duplicateDocument(id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "File duplicate successfully",
+    data: result,
+  });
+});
+
 export const FileControllers = {
   uploadImage,
   uploadPDF,
@@ -111,4 +123,5 @@ export const FileControllers = {
   updateFile,
   makeFavoriteFile,
   deleteFile,
+  duplicateDocument
 };

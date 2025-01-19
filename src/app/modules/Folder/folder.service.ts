@@ -82,6 +82,20 @@ const deleteFolderFromDB = async (id: string) => {
   return result;
 };
 
+const duplicateDocument = async (id: string) => {
+  const file = await FolderModel.findById(id);
+  if (!file) {
+    throw new AppError(404, "File dose not found");
+  }
+
+  const { _id, createdAt, updatedAt, ...restFolderData } = file.toObject();
+
+  const duplicatedFile = new FolderModel(restFolderData);
+  await duplicatedFile.save();
+
+  return duplicatedFile;
+};
+
 export const FolderServices = {
   createFolderIntoDB,
   getAllFolderFromDB,
@@ -89,4 +103,5 @@ export const FolderServices = {
   updateFolderFromDB,
   makeFavoritFolderIntoDB,
   deleteFolderFromDB,
+  duplicateDocument
 };

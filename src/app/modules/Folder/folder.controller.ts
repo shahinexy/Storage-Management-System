@@ -74,6 +74,19 @@ const deleteFolder = CatchAsync(async (req, res) => {
   });
 });
 
+
+const duplicateDocument = CatchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await FolderServices.duplicateDocument(id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "File duplicate successfully",
+    data: result,
+  });
+});
+
 export const FolderControllers = {
   createFolder,
   getAllFolder,
@@ -81,4 +94,5 @@ export const FolderControllers = {
   updateFolder,
   makeFavoriteFolder,
   deleteFolder,
+  duplicateDocument
 };

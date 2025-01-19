@@ -15,7 +15,6 @@ const acountStatus = CatchAsync(async (req, res) => {
 });
 
 const recentAddedData = CatchAsync(async (req, res) => {
-
   const result = await AccountServices.recentAddedData();
 
   sendResponse(res, {
@@ -26,7 +25,19 @@ const recentAddedData = CatchAsync(async (req, res) => {
   });
 });
 
+const favoriteData = CatchAsync(async (req, res) => {
+  const result = await AccountServices.favoriteData();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Got Favorites data Successfully",
+    data: result,
+  });
+});
+
 export const AccountControllers = {
   acountStatus,
-  recentAddedData
+  recentAddedData,
+  favoriteData,
 };

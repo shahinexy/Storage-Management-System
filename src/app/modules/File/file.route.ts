@@ -58,4 +58,6 @@ router.patch("/make-favorite/:id", Auth(), FileControllers.makeFavoriteFile);
 
 router.delete("/:id", Auth(), FileControllers.deleteFile);
 
+router.post("/duplicate/:id", Auth(), FileControllers.duplicateDocument);
+
 export const FileRouters = router;
