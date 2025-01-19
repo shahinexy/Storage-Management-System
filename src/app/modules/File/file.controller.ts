@@ -3,7 +3,6 @@ import sendResponse from "../../utils/sendResponse";
 import { FileServices } from "./file.service";
 
 const uploadImage = CatchAsync(async (req, res) => {
-    console.log(req.file);
   const result = await FileServices.uploadImage(req.file, req.body);
 
   sendResponse(res, {
@@ -15,7 +14,7 @@ const uploadImage = CatchAsync(async (req, res) => {
 });
 
 const uploadPDF = CatchAsync(async (req, res) => {
-  const result = await FileServices.uploadPDF(req.body);
+  const result = await FileServices.uploadPDF(req.file, req.body);
 
   sendResponse(res, {
     statusCode: 200,
@@ -26,7 +25,7 @@ const uploadPDF = CatchAsync(async (req, res) => {
 });
 
 const uploadDoc = CatchAsync(async (req, res) => {
-  const result = await FileServices.uploadDoc(req.body);
+  const result = await FileServices.uploadDoc(req.file, req.body);
 
   sendResponse(res, {
     statusCode: 200,
@@ -71,6 +70,19 @@ const updateFile = CatchAsync(async (req, res) => {
   });
 });
 
+
+const makeFavoriteFolder = CatchAsync(async(req, res)=>{
+    const {id} = req.params;
+    const result = await FileControllers.makeFavoritFolderFromDB(id)
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Maked favorite successfully',
+        data: result
+      })
+})
+
 const deleteFile = CatchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await FileServices.deleteFileFromDB(id);
@@ -90,5 +102,6 @@ export const FileControllers = {
   getAllFile,
   getSingleFile,
   updateFile,
+  makeFavoriteFolder,
   deleteFile,
 };

@@ -8,10 +8,10 @@ const router = express.Router();
 
 router.post(
   "/upload-image",
-  upload.single('file'),
-  (req: Request, res: Response, next: NextFunction)=>{
-    req.body = JSON.parse(req.body.data)
-    next()
+  upload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
   },
   ValidateRequest(FileValidations.fileValidationSchema),
   FileControllers.uploadImage
@@ -19,12 +19,22 @@ router.post(
 
 router.post(
   "/upload-pdf",
+  upload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   ValidateRequest(FileValidations.fileValidationSchema),
   FileControllers.uploadPDF
 );
 
 router.post(
   "/upload-doc",
+  upload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   ValidateRequest(FileValidations.fileValidationSchema),
   FileControllers.uploadDoc
 );
@@ -34,6 +44,8 @@ router.get("/", FileControllers.getAllFile);
 router.get("/:id", FileControllers.getSingleFile);
 
 router.patch("/:id", FileControllers.updateFile);
+
+router.patch("/make-favorite/:id", FileControllers.makeFavoriteFolder); 
 
 router.delete("/:id", FileControllers.deleteFile);
 

@@ -9,7 +9,7 @@ const fileSchema = new Schema<TFile>(
     },
     type: {
       type: String,
-      enum: ["img", "PDF", "doc"],
+      enum: ["img", "pdf", "doc"],
       required: true
     },
     path: {
