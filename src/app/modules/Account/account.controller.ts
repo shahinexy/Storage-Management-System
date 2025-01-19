@@ -14,6 +14,19 @@ const acountStatus = CatchAsync(async (req, res) => {
   });
 });
 
+const recentAddedData = CatchAsync(async (req, res) => {
+
+  const result = await AccountServices.recentAddedData();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Got Recent added data Successfully",
+    data: result,
+  });
+});
+
 export const AccountControllers = {
   acountStatus,
+  recentAddedData
 };

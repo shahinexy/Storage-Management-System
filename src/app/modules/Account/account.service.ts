@@ -20,7 +20,38 @@ const acountStatus = async (accountId: string) => {
   return { totalStorageInGB, usagesStorageInGB, availableStorage };
 };
 
+const recentAddedData = async () => {
+
+  const result = await FolderModel.aggregate([
+    {
+      $match: {}, 
+    },
+    {
+      $project: { _id: 1, name: 1, userId: 1, isFavorite: 1, createdAt: 1 },
+    },
+    {
+      $unionWith: {
+        coll: "files", 
+        pipeline: [
+          {
+            $project: {
+              _id: 1,
+              name: 1,
+              userId: 1,
+              isFavorite: 1,
+              createdAt: 1,
+            },
+          },
+        ],
+      },
+    },
+    { $sort: { createdAt: -1 } },
+  ]);
+
+  return result;
+};
 
 export const AccountServices = {
   acountStatus,
+  recentAddedData,
 };
