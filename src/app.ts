@@ -13,7 +13,11 @@ app.use(cors())
 app.use('/api', router)
 
 app.get('/', (req, res) => {
-  res.send('Storage Management System')
+  res.status(200).json({
+    success: true,
+    message: "Storage Management Server...",
+    timestamp: new Date().toISOString(),
+  });
 })
 
 // global error handler  

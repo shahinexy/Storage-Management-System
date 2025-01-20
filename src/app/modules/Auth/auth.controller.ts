@@ -1,3 +1,4 @@
+import { JwtPayload } from "jsonwebtoken";
 import CatchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { AuthServices } from "./auth.service";
@@ -35,8 +36,21 @@ const changePassword = CatchAsync(async (req, res) => {
   });
 });
 
+const deleteAccount = CatchAsync(async (req, res) => {
+  const {accountId} = req.user as JwtPayload
+  const result = await AuthServices.deleteAccount(accountId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Account Deleted Successfully",
+    data: result,
+  });
+});
+
 export const AuthControllers = {
   createAccount,
   LoginAccount,
   changePassword,
+  deleteAccount
 };

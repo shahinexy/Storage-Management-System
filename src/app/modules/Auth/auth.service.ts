@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import mongoose from "mongoose";
 import config from "../../config";
 import AppError from "../../error/AppError";
+import { FileModel } from "../File/file.model";
 import { TCreateAccount, TLoginAccount } from "./auth.interface";
 import { CreateAccountModel } from "./auth.model";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { FolderModel } from "../Folder/folder.model";
 
 const createAccountIntoDB = async (payload: TCreateAccount) => {
   // if email exist
@@ -67,7 +71,6 @@ const changePassword = async (
     confirmPassword: string;
   }
 ) => {
-
   // check if the account exists
   const isAccountExists = await CreateAccountModel.findById(userData.accountId);
 
@@ -109,8 +112,41 @@ const changePassword = async (
   return null;
 };
 
+const deleteAccount = async (accountId: string) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const deleteFiles = await FileModel.deleteMany(
+      { userId: accountId },
+      { session }
+    );
+
+    const delsteFolders = await FolderModel.deleteMany(
+      { userId: accountId },
+      { session }
+    );
+
+    const deleteAccount = await CreateAccountModel.findByIdAndDelete(
+      accountId,
+      { session }
+    );
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return deleteAccount;
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new Error(error);
+  }
+};
+
 export const AuthServices = {
   createAccountIntoDB,
   loginAccount,
   changePassword,
+  deleteAccount,
 };

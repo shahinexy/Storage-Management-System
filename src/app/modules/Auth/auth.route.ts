@@ -25,5 +25,6 @@ router.post(
   AuthControllers.changePassword
 );
 
+router.delete("/delete-account", Auth(), AuthControllers.deleteAccount);
 
 export const AuthRouters = router;
