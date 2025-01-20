@@ -24,7 +24,7 @@ const Auth = () => {
     const isAccountExists = await CreateAccountModel.findById(accountId);
 
     if (!isAccountExists) {
-      throw new AppError(404, "Account do nto exists");
+      throw new AppError(404, "Account do not exists");
     }
 
     req.user = deocded as JwtPayload;
