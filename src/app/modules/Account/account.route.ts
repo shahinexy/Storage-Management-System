@@ -4,10 +4,12 @@ import { AccountControllers } from "./account.controller";
 
 const router = express.Router();
 
-router.get("/account-status", Auth(), AccountControllers.acountStatus);
+router.get("/status", Auth(), AccountControllers.acountStatus);
 
-router.get("/recent-added", Auth(), AccountControllers.recentAddedData);
+router.get("/recent-data", Auth(), AccountControllers.recentAddedData);
 
 router.get("/favorite", Auth(), AccountControllers.favoriteData);
+
+router.get("/data", Auth(), AccountControllers.filterByDate);
 
 export const AccountRouters = router;

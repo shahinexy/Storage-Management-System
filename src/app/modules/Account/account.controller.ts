@@ -36,8 +36,21 @@ const favoriteData = CatchAsync(async (req, res) => {
   });
 });
 
+const filterByDate = CatchAsync(async (req, res) => {
+  const { date } = req.query;
+  const result = await AccountServices.filterByDate(date);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Filter By Date Successfully",
+    data: result,
+  });
+});
+
 export const AccountControllers = {
   acountStatus,
   recentAddedData,
   favoriteData,
+  filterByDate,
 };

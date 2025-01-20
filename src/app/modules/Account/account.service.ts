@@ -23,9 +23,6 @@ const acountStatus = async (accountId: string) => {
 const recentAddedData = async () => {
   const result = await FolderModel.aggregate([
     {
-      $match: {},
-    },
-    {
       $unionWith: {
         coll: "files",
         pipeline: [],
@@ -57,8 +54,34 @@ const favoriteData = async () => {
   return result;
 };
 
+const filterByDate = async (date: string) => {
+  const startOfDay = new Date(date);
+  const endOfDay = new Date(startOfDay);
+  endOfDay.setUTCDate(startOfDay.getUTCDate() + 1);
+
+  const result = await FolderModel.aggregate([
+    {
+      $unionWith: {
+        coll: "files",
+        pipeline: [],
+      },
+    },
+    {
+      $match: {
+        createdAt: {
+          $gte: startOfDay,
+          $lt: endOfDay,
+        },
+      },
+    },
+  ]);
+
+  return result;
+};
+
 export const AccountServices = {
   acountStatus,
   recentAddedData,
   favoriteData,
+  filterByDate,
 };
