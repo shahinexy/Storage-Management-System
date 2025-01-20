@@ -91,7 +91,10 @@ It's a backend for a file management platform where users can upload, organize, 
 
 **Filter By Date: (GET)**
 `/api/accounts/data?` <br>
-Query Parameters Example: `/api/accounts/data?date=2025-01-18` <br>
+Query Parameters Example: <br>
+```diff
+! /api/accounts/data?date=2025-01-18 
+```
 
 ### Folder
 
@@ -127,10 +130,14 @@ Query Parameters Example: `/api/accounts/data?date=2025-01-18` <br>
 
 **Upload Image: (POST)**
 `/api/files/upload-img` <br>
+```diff
+- For testing purposes send JPG/PNG file from Postman (Key: file, Type: File)
+```
 
-<span style="color:red;">For testing purpuse send JPG/PNG file from Postman (Key: file, Type: File)</span>
-
-**Request Body:** <span style="color:red;">(Key: data, Type: Text)</span>
+**Request Body:** 
+```diff
+- (Key: data, Type: Text)
+```
 
 ```
 {
@@ -142,9 +149,14 @@ Query Parameters Example: `/api/accounts/data?date=2025-01-18` <br>
 **Upload PDF: (POST)**
 `/api/files/upload-pdf` <br>
 
-<span style="color:red;">For testing purpuse send PDF file from Postman (Key: file, Type: File)</span>
+```diff
+- For testing purposes send JPG/PNG file from Postman (Key: file, Type: File)
+```
 
-**Request Body:** <span style="color:red;">(Key: data, Type: Text)</span>
+**Request Body:** 
+```diff
+- (Key: data, Type: Text)
+```
 
 ```
 {
@@ -156,10 +168,14 @@ Query Parameters Example: `/api/accounts/data?date=2025-01-18` <br>
 **Upload Document: (POST)**
 `/api/files/upload-doc` <br>
 
-<span style="color:red;">For testing purpuse send docx file from Postman (Key: file, Type: File)</span>
+```diff
+- For testing purposes send JPG/PNG file from Postman (Key: file, Type: File)
+```
 
-**Request Body:** <span style="color:red;">(Key: data, Type: Text)</span>
-
+**Request Body:** 
+```diff
+- (Key: data, Type: Text)
+```
 ```
 {
     "name": "New pdf",
@@ -179,7 +195,10 @@ Query Parameters Example: `/api/accounts/data?date=2025-01-18` <br>
 
 **Get All File By Type (img, pdf, docx): (POST)**
 `/api/files?` <br>
-Query Parameters Example: `/api/files?type=img` <br>
+Query Parameters Example: <br>
+```diff
+! /api/files?type=img
+```
 
 **API For Get Single(GET), Make Favorite(PATCH), Delete(DELETE), Duplicate(POST)** <br>
 
