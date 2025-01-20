@@ -1,3 +1,4 @@
+import AppError from "../../error/AppError";
 import CatchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { AccountServices } from "./account.service";
@@ -38,7 +39,12 @@ const favoriteData = CatchAsync(async (req, res) => {
 
 const filterByDate = CatchAsync(async (req, res) => {
   const { date } = req.query;
-  const result = await AccountServices.filterByDate(date);
+
+  if (!date) {
+    throw new AppError(400, "The 'date' query parameter is required.");
+  }
+
+  const result = await AccountServices.filterByDate(date as string);
 
   sendResponse(res, {
     statusCode: 200,

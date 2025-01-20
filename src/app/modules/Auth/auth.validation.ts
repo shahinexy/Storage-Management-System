@@ -18,7 +18,18 @@ const loginAccountValidationSchema = z.object({
   }),
 });
 
+const changePasswordValidationSchema = z.object({
+  body: z.object({
+    oldPassword: z.string().min(8, "Old password required"),
+    newPassword: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters"),
+  }),
+});
+
 export const AuthValidations = {
   createAccountValidationSchema,
-  loginAccountValidationSchema
+  loginAccountValidationSchema,
+  changePasswordValidationSchema
 };

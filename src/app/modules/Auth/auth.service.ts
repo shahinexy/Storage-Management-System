@@ -3,7 +3,7 @@ import AppError from "../../error/AppError";
 import { TCreateAccount, TLoginAccount } from "./auth.interface";
 import { CreateAccountModel } from "./auth.model";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 const createAccountIntoDB = async (payload: TCreateAccount) => {
   // if email exist
@@ -59,7 +59,58 @@ const loginAccount = async (payload: TLoginAccount) => {
   };
 };
 
+const changePassword = async (
+  userData: JwtPayload,
+  payload: {
+    oldPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }
+) => {
+
+  // check if the account exists
+  const isAccountExists = await CreateAccountModel.findById(userData.accountId);
+
+  if (!isAccountExists) {
+    throw new AppError(404, "Account dose not exists");
+  }
+
+  // check if the password correct
+  const isPasswordMatched = await bcrypt.compare(
+    payload.oldPassword,
+    isAccountExists.password
+  );
+
+  if (!isPasswordMatched) {
+    throw new AppError(400, "Password dose not matched");
+  }
+
+  // check password and confirmpassword are matched
+  if (payload.newPassword !== payload.confirmPassword) {
+    throw new AppError(401, "Confirm passwords dose not match");
+  }
+
+  // has new password
+  const newHashedPassword = await bcrypt.hash(
+    payload.newPassword,
+    Number(config.bcrypt_salt_round)
+  );
+
+  await CreateAccountModel.findOneAndUpdate(
+    {
+      _id: isAccountExists._id,
+      email: isAccountExists.email,
+    },
+    {
+      password: newHashedPassword,
+    }
+  );
+
+  return null;
+};
+
 export const AuthServices = {
   createAccountIntoDB,
   loginAccount,
+  changePassword,
 };

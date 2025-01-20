@@ -1,6 +1,7 @@
-import calculateStorageUsage from "../../utils/calculateStorageUsage";
+import AppError from "../../error/AppError";
 import { FileModel } from "../File/file.model";
 import { FolderModel } from "../Folder/folder.model";
+import calculateStorageUsage from "./account.utils";
 
 const acountStatus = async (accountId: string) => {
   const fileUsageStorageInGB = await calculateStorageUsage(
@@ -13,9 +14,9 @@ const acountStatus = async (accountId: string) => {
     accountId
   );
 
-  const usagesStorageInGB = fileUsageStorageInGB + folderUsageStorageInGB;
+  const usagesStorageInGB = fileUsageStorageInGB + folderUsageStorageInGB || 0;
   const totalStorageInGB = 15;
-  const availableStorage = totalStorageInGB - usagesStorageInGB;
+  const availableStorage = totalStorageInGB - usagesStorageInGB || 0;
 
   return { totalStorageInGB, usagesStorageInGB, availableStorage };
 };
@@ -55,6 +56,11 @@ const favoriteData = async () => {
 };
 
 const filterByDate = async (date: string) => {
+  const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(date);
+  if (!isValidDate) {
+    throw new AppError(400, "Invalid date format. Expected format is 'YYYY-MM-DD'.");
+  }
+
   const startOfDay = new Date(date);
   const endOfDay = new Date(startOfDay);
   endOfDay.setUTCDate(startOfDay.getUTCDate() + 1);
